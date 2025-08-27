@@ -67,7 +67,7 @@
             transition: width 0.5s ease-in-out;
         }
 
-        #fome-progress::-webkit-progress-value { background-color: #ef4444; }
-        #sede-progress::-webkit-progress-value { background-color: #3b82f6; }
-        #felicidade-progress::-webkit-progress-value { background-color: #22c55e; }
-        #saude-progress::-webkit-progress-value { background-color: #f97316; }
+        #fome-progress::-webkit-progress-value { background-color: #ff7878; }
+        #sede-progress::-webkit-progress-value { background-color: #a0e9ff; }
+        #felicidade-progress::-webkit-progress-value { background-color: #ffed86; }
+        #saude-progress::-webkit-progress-value { background-color: #ff68955e; }
