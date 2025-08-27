@@ -1,11 +1,327 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Meu Bichinho Pixelado</title>
+    <!-- Carrega a fonte Inter e o Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Estilo para a fonte e o fundo pixelado */
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        
+        /* Fundo inspirado na imagem do usuário */
+        .pixel-bg {
+            background-image: linear-gradient(to bottom, #d2e4f7, #f7e0f0);
+            background-size: 20px 20px;
+            background-position: 0 0, 10px 10px;
+            
+            /* Padrão de "nuvens" ou "pontos" */
+            background-image:
+                radial-gradient(ellipse at 10px 10px, #fff 1px, transparent 0),
+                radial-gradient(ellipse at 25px 25px, #fde047 1px, transparent 0);
+            background-size: 50px 50px;
+        }
+
+        /* Garante que o canvas seja pixelado */
+        #pet-canvas {
+            image-rendering: pixelated;
+        }
+        
+        /* Estilos dos botões para se parecerem com os da imagem */
+        .pixel-btn {
+            background-color: #e0f7fa;
+            border: 2px solid #5a5a5a;
+            box-shadow: 2px 2px 0px 0px #5a5a5a;
+            border-radius: 9999px; /* Arredondado */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            transition: all 0.1s ease-in-out;
+            width: 60px;
+            height: 60px;
+        }
+
+        .pixel-btn:hover {
+            transform: translate(1px, 1px);
+            box-shadow: 1px 1px 0px 0px #5a5a5a;
+        }
+        .pixel-btn:active {
+            transform: translate(2px, 2px);
+            box-shadow: 0px 0px 0px 0px #5a5a5a;
+        }
+        
+        /* Estilo para as barras de progresso */
+        progress {
+            appearance: none;
+            -webkit-appearance: none;
+            border-radius: 9999px;
+            height: 1rem;
+            width: 100%;
+            border: 2px solid #5a5a5a;
+            box-shadow: 1px 1px 0px 0px #5a5a5a;
+        }
+        
+        progress::-webkit-progress-bar {
+            background-color: #f3f4f6;
+            border-radius: 9999px;
+        }
+        progress::-webkit-progress-value {
+            border-radius: 9999px;
+            transition: width 0.5s ease-in-out;
+        }
+
+        #fome-progress::-webkit-progress-value { background-color: #ef4444; }
+        #sede-progress::-webkit-progress-value { background-color: #3b82f6; }
+        #felicidade-progress::-webkit-progress-value { background-color: #22c55e; }
+        #saude-progress::-webkit-progress-value { background-color: #f97316; }
+    </style>
 </head>
-<body>
-    <h1>oi</h1>
+<body class="pixel-bg flex items-center justify-center min-h-screen p-4 md:p-8">
+
+    <div class="bg-[#f7f0f7] border-4 border-[#8b8b8b] rounded-2xl shadow-[8px_8px_0_0_#5a5a5a] max-w-lg w-full p-4 md:p-6 text-center">
+        
+        <!-- Top Status Bar -->
+        <div class="flex items-center justify-between w-full mb-6 text-gray-800 font-semibold text-lg">
+            <div class="flex items-center space-x-2 bg-white px-3 py-1 rounded-full shadow-[2px_2px_0_0_#5a5a5a] border-2 border-[#5a5a5a]">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-cloud-rain"><path d="M4 14.899A7 7 0 1 1 15.71 8h1.79a4.5 4.5 0 0 1 2.5 8.242"/><path d="M16 14v6"/><path d="M8 14v6"/><path d="M12 16v6"/></svg>
+                <span>Chuva</span>
+            </div>
+            <div class="flex items-center space-x-2 bg-white px-3 py-1 rounded-full shadow-[2px_2px_0_0_#5a5a5a] border-2 border-[#5a5a5a]">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-moon-star"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/><path d="M17.5 17.5 19 19"/><path d="m14.2 13.8-1.5 1.5"/><path d="M13.5 10.5 12 12m1.5-1.5 1.5 1.5m-3 3 1.5 1.5m-1.5-1.5-1.5 1.5"/></svg>
+                <span>10:00</span>
+            </div>
+            <div class="flex items-center space-x-2 bg-white px-3 py-1 rounded-full shadow-[2px_2px_0_0_#5a5a5a] border-2 border-[#5a5a5a]">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-coin"><path d="M16 12h2a2 2 0 0 1 0 4H2a2 2 0 0 0 0 4h14a2 2 0 0 0 2-2v-4a2 2 0 0 0-2-2h-2"/><path d="M18 8h2a2 2 0 0 1 0 4h-4a2 2 0 0 1 0-4h2z"/><path d="M18 4h2a2 2 0 0 1 0 4h-4a2 2 0 0 1 0-4h2z"/></svg>
+                <span>32737</span>
+            </div>
+        </div>
+
+        <!-- Botões de Ação (Linha 1) -->
+        <div class="flex justify-around mb-6">
+            <button id="alimentar-btn" class="pixel-btn">
+                <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-carrot text-gray-700"><path d="M.2 21a1.2 1.2 0 0 1 1.7 0L10 13.5l1.5 1.5c.3.2.5.2.8.2s.6-.1.8-.4l2-3-2.5-2.5a2.1 2.1 0 0 1-.4-.8c0-.3.1-.5.3-.8l1.5-1.5L9.5 4.5l-2.5 2.5a2.1 2.1 0 0 1-.8.4c-.3 0-.5-.1-.8-.3l-1.5-1.5L4.5 9.5l2.5 2.5c.2.3.4.5.4.8s-.1.6-.3.8l-1.5 1.5L.2 21z"/></svg>
+            </button>
+            <button id="dar-agua-btn" class="pixel-btn">
+                <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-droplet text-gray-700"><path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"/></svg>
+            </button>
+            <button id="brincar-btn" class="pixel-btn">
+                <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-gamepad text-gray-700"><path d="M6 12H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v6a2 2 0 0 1-2 2h-2"/><path d="M6 12v6a2 2 0 0 0 2 2h4a2 2 0 0 0 2-2v-6"/><path d="M12 10v4"/><path d="M10 12h4"/><path d="M15 11h2"/><path d="M15 13h2"/><path d="M17 12h2"/><path d="M12 20h2"/></svg>
+            </button>
+            <button id="remedio-btn" class="pixel-btn">
+                <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-plus text-gray-700"><path d="M5 12h14"/><path d="M12 5v14"/></svg>
+            </button>
+        </div>
+
+        <!-- Área Central do Pet -->
+        <div class="relative w-full h-[300px] border-4 border-[#8b8b8b] rounded-2xl overflow-hidden shadow-[4px_4px_0_0_#5a5a5a] mb-6 bg-[#d1e8d4]">
+            <canvas id="pet-canvas" class="w-full h-full"></canvas>
+            <div id="pet-message" class="absolute inset-x-0 bottom-4 p-2 mx-auto bg-white rounded-lg shadow-md border-2 border-[#5a5a5a] text-sm text-gray-700 w-3/4">
+                Cuide do seu bichinho!
+            </div>
+        </div>
+
+        <!-- Botões de Ação (Linha 2 - placeholders) -->
+        <div class="flex justify-around mb-6">
+            <button class="pixel-btn"><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-home text-gray-700"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></button>
+            <button class="pixel-btn"><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-lock text-gray-700"><rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></button>
+            <button class="pixel-btn"><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-plug-2 text-gray-700"><path d="m8 12 1.5 1.5c.8.8.8 2.2 0 3L8 18"/><path d="m16 12-1.5 1.5c-.8.8-.8 2.2 0 3L16 18"/><path d="M22 13v-2"/><path d="M10 2v2.5"/><path d="M14 2v2.5"/><path d="M15 13h2l-2.5 2.5c-.8.8-2.2.8-3 0L7 13h2"/></svg></button>
+            <button class="pixel-btn"><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-shopping-bag text-gray-700"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" x2="21" y1="6" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg></button>
+        </div>
+
+        <!-- Barras de Status -->
+        <div class="grid grid-cols-2 gap-4 mb-6">
+            <div class="text-left">
+                <label class="block text-xs font-semibold text-gray-700 mb-1">Fome</label>
+                <progress id="fome-progress" value="100" max="100"></progress>
+            </div>
+            <div class="text-left">
+                <label class="block text-xs font-semibold text-gray-700 mb-1">Sede</label>
+                <progress id="sede-progress" value="100" max="100"></progress>
+            </div>
+            <div class="text-left">
+                <label class="block text-xs font-semibold text-gray-700 mb-1">Felicidade</label>
+                <progress id="felicidade-progress" value="100" max="100"></progress>
+            </div>
+            <div class="text-left">
+                <label class="block text-xs font-semibold text-gray-700 mb-1">Saúde</label>
+                <progress id="saude-progress" value="100" max="100"></progress>
+            </div>
+        </div>
+
+        <!-- Menu Inferior (placeholders) -->
+        <div class="flex justify-around bg-white px-2 py-2 rounded-full shadow-[2px_2px_0_0_#5a5a5a] border-2 border-[#5a5a5a]">
+            <button class="flex items-center justify-center w-12 h-12 text-gray-700"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-text"><path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1 0-5H20"/><path d="M8 7h6"/><path d="M8 11h8"/></svg></button>
+            <button class="flex items-center justify-center w-12 h-12 text-gray-700"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-camera"><path d="M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3z"/><circle cx="12" cy="13" r="3"/></svg></button>
+            <button class="flex items-center justify-center w-12 h-12 text-gray-700"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-trophy"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/><path d="M4.5 22h15"/><path d="M12 17L12 2"/><path d="M5 9h14a4 4 0 0 1 0 8H5a4 4 0 0 1 0-8z"/></svg></button>
+            <button class="flex items-center justify-center w-12 h-12 text-gray-700"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-youtube text-red-500"><path d="M2.8 7.35a2.5 2.5 0 0 1 2.94-2.22c.98.24 2.2.64 4.47.64h4.47c2.27 0 3.49-.4 4.47-.64a2.5 2.5 0 0 1 2.94 2.22v4.7c0 1.25-.66 2.55-2.94 2.22-.98-.24-2.2-.64-4.47-.64H10.2c-2.27 0-3.49.4-4.47.64a2.5 2.5 0 0 1-2.94-2.22z"/><polygon points="10 8 16 12 10 16 10 8"/></svg></button>
+            <button class="flex items-center justify-center w-12 h-12 text-gray-700"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-settings text-gray-700"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 0 2.73l-.15.1a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1 0-2.73l.15-.1a2 2 0 0 0 .73-2.73l-.22-.39a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/><circle cx="12" cy="12" r="3"/></svg></button>
+        </div>
+    </div>
+
+    <script>
+        // --- Definição das variáveis de estado e elementos DOM ---
+        const canvas = document.getElementById('pet-canvas');
+        const ctx = canvas.getContext('2d');
+        const petMessage = document.getElementById('pet-message');
+        const petSize = 50; // Tamanho do nosso bichinho (em pixels)
+        const groundLevel = canvas.height - 20; // Posição do chão
+
+        let petState = {
+            fome: 100,
+            sede: 100,
+            felicidade: 100,
+            saude: 100,
+            isAlive: true
+        };
+
+        // Carrega as barras de progresso do DOM
+        const fomeBar = document.getElementById('fome-progress');
+        const sedeBar = document.getElementById('sede-progress');
+        const felicidadeBar = document.getElementById('felicidade-progress');
+        const saudeBar = document.getElementById('saude-progress');
+
+        // Carrega os botões de ação do DOM
+        const alimentarBtn = document.getElementById('alimentar-btn');
+        const darAguaBtn = document.getElementById('dar-agua-btn');
+        const brincarBtn = document.getElementById('brincar-btn');
+        const remedioBtn = document.getElementById('remedio-btn');
+
+        // --- Funções de Desenho para a animação ---
+        function drawPet() {
+            // Limpa o canvas para o próximo frame
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            
+            // Define o tamanho e cor do "bichinho" (um quadrado)
+            ctx.fillStyle = '#ff8c00'; // Cor do pet
+            
+            // Desenha um "bichinho" pixelado
+            ctx.fillRect(canvas.width / 2 - petSize / 2, groundLevel - petSize, petSize, petSize);
+        }
+
+        function drawSadPet() {
+             ctx.clearRect(0, 0, canvas.width, canvas.height);
+             ctx.fillStyle = '#9c9c9c'; // Cor triste
+             ctx.fillRect(canvas.width / 2 - petSize / 2, groundLevel - petSize, petSize, petSize);
+        }
+        
+        function drawSickPet() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            ctx.fillStyle = '#b7f047'; // Cor de doente (verde)
+            ctx.fillRect(canvas.width / 2 - petSize / 2, groundLevel - petSize, petSize, petSize);
+        }
+
+        // --- Funções de Lógica do Jogo ---
+
+        function updateUI() {
+            // Atualiza o valor das barras de progresso
+            fomeBar.value = petState.fome;
+            sedeBar.value = petState.sede;
+            felicidadeBar.value = petState.felicidade;
+            saudeBar.value = petState.saude;
+
+            // Altera a imagem do pet baseado no seu estado
+            if (!petState.isAlive) {
+                // Game Over, desenha o pet morto e desativa os botões
+                showMessage("Fim de jogo! Seu bichinho não sobreviveu :(");
+                // Por agora, o pet sumirá se não estiver vivo.
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                disableButtons();
+            } else if (petState.saude <= 25) {
+                // Pet doente
+                drawSickPet();
+                showMessage("Seu bichinho está doente! Dê remédio!");
+            } else if (petState.felicidade <= 25) {
+                // Pet triste
+                drawSadPet();
+                showMessage("Seu bichinho está triste! Brinque com ele!");
+            } else {
+                // Pet normal
+                drawPet();
+                showMessage("Tudo certo por aqui!");
+            }
+        }
+        
+        function disableButtons() {
+            alimentarBtn.disabled = true;
+            darAguaBtn.disabled = true;
+            brincarBtn.disabled = true;
+            remedioBtn.disabled = true;
+        }
+
+        function showMessage(msg) {
+            petMessage.textContent = msg;
+        }
+
+        // --- Ações dos Botões ---
+
+        alimentarBtn.addEventListener('click', () => {
+            if (!petState.isAlive) return;
+            petState.fome = Math.min(100, petState.fome + 25);
+            petState.felicidade = Math.min(100, petState.felicidade + 5);
+            showMessage("O bichinho se alimentou! A fome diminuiu.");
+            updateUI();
+        });
+
+        darAguaBtn.addEventListener('click', () => {
+            if (!petState.isAlive) return;
+            petState.sede = Math.min(100, petState.sede + 30);
+            showMessage("O bichinho bebeu água! A sede foi saciada.");
+            updateUI();
+        });
+
+        brincarBtn.addEventListener('click', () => {
+            if (!petState.isAlive) return;
+            if (petState.felicidade >= 100) {
+                showMessage("Seu bichinho já está muito feliz!");
+                return;
+            }
+            petState.felicidade = Math.min(100, petState.felicidade + 35);
+            petState.fome = Math.max(0, petState.fome - 10); // Brincar dá fome!
+            petState.sede = Math.max(0, petState.sede - 10); // Brincar dá sede!
+            showMessage("Você brincou com o bichinho. Ele está mais feliz!");
+            updateUI();
+        });
+
+        remedioBtn.addEventListener('click', () => {
+            if (!petState.isAlive) return;
+            if (petState.saude >= 100) {
+                showMessage("Seu bichinho já está saudável!");
+                return;
+            }
+            petState.saude = Math.min(100, petState.saude + 50);
+            showMessage("O bichinho tomou o remédio e está se sentindo melhor.");
+            updateUI();
+        });
+
+        // --- Game Loop Principal ---
+        function gameLoop() {
+            if (!petState.isAlive) return;
+
+            // Diminui os status com o tempo
+            petState.fome = Math.max(0, petState.fome - 0.5);
+            petState.sede = Math.max(0, petState.sede - 0.5);
+            petState.felicidade = Math.max(0, petState.felicidade - 0.2);
+            petState.saude = Math.max(0, petState.saude - 0.1);
+
+            // Verifica as condições de morte
+            if (petState.fome <= 0 || petState.sede <= 0 || petState.saude <= 0) {
+                petState.isAlive = false;
+            }
+
+            updateUI();
+        }
+
+        // Inicia o loop do jogo
+        setInterval(gameLoop, 500); // Roda a cada 0.5 segundos
+
+        // Chamada inicial para renderizar o pet e a UI
+        updateUI();
+    </script>
+
 </body>
 </html>
