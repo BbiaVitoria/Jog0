@@ -26,11 +26,11 @@ const remedioBtn = document.getElementById('remedio-btn');
 // --- Caminhos para as imagens do bichinho ---
 const petImages = {
     normal: 'caminho/para/pet_normal.png',
-    fome: 'caminho/para/pet_com_fome.png',
-    sede: 'caminho/para/pet_com_sede.png',
-    triste: 'caminho/para/pet_triste.png',
-    doente: 'caminho/para/pet_doente.png',
-    morto: 'caminho/para/pet_morto.png'
+    fome:   '<img src="zbrava.gif">',
+    sede: ' <img src="OIP.jpeg">',
+    triste: ' <img src="OIP.jpeg">',
+    doente: ' <img src="OIP.jpeg">',
+    morto: ' <img src="OIP.jpeg">'
 };
 
 // --- Funções de Lógica do Jogo ---
