@@ -5,9 +5,8 @@
             font-family: 'Inter', sans-serif;
         }
         
-        /* Fundo inspirado na imagem do usuário */
-        .pixel-bg {
-            background-image: linear-gradient(to bottom, #d2e4f7, #f7e0f0);
+         .pixel-bg {
+            background-image: ;
             background-size: 20px 20px;
             background-position: 0 0, 10px 10px;
             
@@ -17,6 +16,7 @@
                 radial-gradient(ellipse at 25px 25px, #fde047 1px, transparent 0);
             background-size: 50px 50px;
         }
+
 
         /* Garante que o canvas seja pixelado */
         #pet-canvas {
